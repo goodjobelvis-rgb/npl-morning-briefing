@@ -4,6 +4,11 @@
 
 매일 여러 사이트를 돌며 30분씩 찾던 시장 동향을, 아침 메일 한 통(5분 이내)으로 끝내는 것이 목표입니다.
 
+## 바로 보기
+
+- 배포 주소: https://npl-morning-briefing.vercel.app (열면 오늘 브리핑을 만들어 보여 줍니다. 첫 로드는 30~60초 걸립니다)
+- 소스: https://github.com/goodjobelvis-rgb/npl-morning-briefing
+
 ## 무엇을 하나요
 
 1. **수집:** 금융위원회 보도자료와 구글·빙 뉴스 RSS에서 키워드(NPL, 부실채권, 신용채권)로 지난 24시간 기사를 모읍니다.

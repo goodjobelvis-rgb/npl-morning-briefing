@@ -30,8 +30,8 @@ Vercel Cron(평일 08:00 KST) → `/api/briefing/send` (토큰 확인) → 수�
 ## 4. 배포 전·후 할 일
 
 1. [ ] Gmail 앱 비밀번호를 16자리로 다시 만들어 `.env`의 `MAIL_APP_PASSWORD`에 넣고, 로컬에서 테스트 메일 1통 받기
-2. [ ] `.env.example`을 보고 Vercel 환경 변수에 `OPENAI_API_KEY`, `CRON_SECRET`(긴 값으로 교체), `MAIL_USER`, `MAIL_APP_PASSWORD`, `MAIL_TO`(주소 2개) 입력
-3. [ ] 배포 후 `/api/briefing/send?dryRun=1`을 토큰과 함께 호출해 메일 내용 확인
+2. [x] `.env.example`을 보고 Vercel 환경 변수에 `OPENAI_API_KEY`, `CRON_SECRET`(긴 값으로 교체), `MAIL_USER`, `MAIL_APP_PASSWORD`, `MAIL_TO`(주소 2개) 입력
+3. [x] 배포 후 `/api/briefing/send?dryRun=1`을 토큰과 함께 호출해 메일 내용 확인 (2026-10-29 확인: 토큰 없음·틀린 토큰은 401, 맞는 토큰은 200)
 4. [ ] 같은 주소를 `dryRun` 없이 호출해 테스트 메일 받기 (주소 2개 모두 도착하는지 확인)
 5. [ ] 다음 평일 아침 8시 10분 전에 메일이 도착하는지 확인
 6. [ ] 이메일 발송이 안정되기 전까지는 확인용 웹페이지를 주 확인 수단으로 쓰고, 그 주소는 공유하지 않기 (열면 AI 비용이 든다)
