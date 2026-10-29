@@ -6,7 +6,7 @@
 
 ## 1. 한 줄 요약
 
-평일 오전 8시에 금융위원회 보도자료와 뉴스 RSS에서 NPL·부실채권·신용채권 소식을 모아, AI로 정리해 개인 Gmail로 보내는 1인용 Next.js 앱을 Vercel에 배포한다.
+평일 오전 8시에 금융위원회 보도자료와 뉴스 RSS에서 NPL·부실채권·신용채권 소식을 모아, AI로 정리해 이메일 주소 2개(개인 Gmail, 회사 주소)로 보내는 1인용 Next.js 앱을 Vercel에 배포한다. 이메일 발송이 안정되기 전까지는 확인용 웹페이지로 본다.
 
 ## 2. 처리 흐름
 
@@ -22,18 +22,19 @@ Vercel Cron(평일 08:00 KST) → `/api/briefing/send` (토큰 확인) → 수�
 | 2. 금융위 수집 | 보도자료 목록에서 기준 날짜 이후 글을 가져와 본문 추출 | `lib/briefing/sources/fsc.ts` | 구현됨 |
 | 3. 뉴스 수집 | 키워드별 구글 뉴스·빙 뉴스 RSS, 제목 기준 중복 제거, 최신 100건 | `lib/briefing/sources/news.ts` | 구현됨 |
 | 4. AI 정리 (M1) | OpenAI로 관련 기사 거르기·같은 소식 묶기·3줄 요약, 금융위를 맨 위로, 최대 10건 | `lib/briefing/summarize.ts`, `lib/briefing/index.ts` | 구현됨 |
-| 5. 메일 (M2) | 제목 `[NPL 모닝브리핑] YYYY-MM-DD (요일) · N건`, 0건 안내, 오류 메일, Gmail 발송 | `lib/briefing/mail.ts` | 구현됨 |
+| 5. 메일 (M2) | 제목 `[NPL 모닝브리핑] YYYY-MM-DD (요일) · N건`, 0건 안내, 오류 메일, Gmail 발송 | `lib/briefing/mail.ts` | 코드 구현됨 · 실제 발송 미확인 (Gmail 인증 오류 535) |
 | 6. API | `/api/briefing` (JSON 확인용), `/api/briefing/send` (발송, `?dryRun=1`이면 미리 보기). 둘 다 `CRON_SECRET` 확인 | `app/api/briefing/` | 구현됨 |
 | 7. 자동 발송 | `0 23 * * 0-4` (UTC) = 한국 시간 평일 08:00 | `vercel.json` | 구현됨 |
 | 8. 확인용 웹 페이지 | 첫 화면에 오늘 브리핑 표시, 결과 1시간 보관 | `app/page.tsx`, `lib/briefing/today.ts` | 구현됨 (토큰 확인 없음) |
 
 ## 4. 배포 전·후 할 일
 
-1. [ ] `.env.example`을 보고 Vercel 환경 변수에 `OPENAI_API_KEY`, `CRON_SECRET`, `MAIL_USER`, `MAIL_APP_PASSWORD`, `MAIL_TO` 입력
-2. [ ] 배포 후 `/api/briefing/send?dryRun=1`을 토큰과 함께 호출해 메일 내용 확인
-3. [ ] 같은 주소를 `dryRun` 없이 호출해 테스트 메일 1통 받기
-4. [ ] 다음 평일 아침 8시 10분 전에 메일이 도착하는지 확인
-5. [ ] 확인용 웹 페이지 주소는 공유하지 않기 (열면 AI 비용이 든다)
+1. [ ] Gmail 앱 비밀번호를 16자리로 다시 만들어 `.env`의 `MAIL_APP_PASSWORD`에 넣고, 로컬에서 테스트 메일 1통 받기
+2. [ ] `.env.example`을 보고 Vercel 환경 변수에 `OPENAI_API_KEY`, `CRON_SECRET`(긴 값으로 교체), `MAIL_USER`, `MAIL_APP_PASSWORD`, `MAIL_TO`(주소 2개) 입력
+3. [ ] 배포 후 `/api/briefing/send?dryRun=1`을 토큰과 함께 호출해 메일 내용 확인
+4. [ ] 같은 주소를 `dryRun` 없이 호출해 테스트 메일 받기 (주소 2개 모두 도착하는지 확인)
+5. [ ] 다음 평일 아침 8시 10분 전에 메일이 도착하는지 확인
+6. [ ] 이메일 발송이 안정되기 전까지는 확인용 웹페이지를 주 확인 수단으로 쓰고, 그 주소는 공유하지 않기 (열면 AI 비용이 든다)
 
 ## 5. 성공 기준 확인 계획
 
